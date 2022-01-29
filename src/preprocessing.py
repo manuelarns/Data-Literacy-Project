@@ -5,8 +5,12 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 import geopandas
 
-### Load datasets
 def load_data():
+    '''
+    load all datasets: world_data, salaries_data, countries_data
+
+    return: datasets: world_data, salaries_data, countries_data
+    '''
     world_data = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))    # goepandas map and gdp data
     salaries_data = pd.read_csv('../data/salaries.csv')                                     # salaries dataset
     countries_data = pd.read_csv('../data/countries.csv')                                   # ISO codes for all counties
