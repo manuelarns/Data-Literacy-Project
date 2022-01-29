@@ -44,6 +44,7 @@ def extend_country_code(salaries_data, countries_data):
                                                    axis=1).rename(columns = {'iso_a3':'employee_residence_iso_a3'})
     return salaries_a3
 
+
 def add_gdp_per_capita_to_salaries(salaries, world_data):
     '''
     Calculates the estimated GDP per capita for all countries using the data from the world_data dataframe
@@ -115,6 +116,7 @@ def add_samecountry_attribute(salaries):
     salaries.loc[salaries["company_location_iso_a3"] != salaries["employee_residence_iso_a3"], "same_country"] = 0
     return salaries
 
+
 def add_ml_or_ai_attribute(salaries):
     '''
     Add attribute: Does the job_title indicate an ai/ml related work?
@@ -126,6 +128,7 @@ def add_ml_or_ai_attribute(salaries):
     salaries["ai_or_ml_job"] = pd.DataFrame(zeros_data)
     salaries.loc[salaries["job_title"].str.contains("Data|Machine Learning|AI|ML") == True, "ai_or_ml_job"] = 1
     return salaries
+
 
 def complete_preprocessing():
     '''
