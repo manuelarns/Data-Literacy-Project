@@ -16,6 +16,18 @@ def load_data():
     countries_data = pd.read_csv('../data/countries.csv')                                   # ISO codes for all counties
     return world_data, salaries_data, countries_data
 
+def drop_outliers(salaries_data):
+    '''
+    Drop outliers that have higher salary than the 99 quantile or lower than 1 quantile
+    '''
+    salaries = salaries_data[
+        salaries_data.salary_in_usd < salaries_data.salary_in_usd.quantile(.98)]
+    
+    salaries = salaries[
+        salaries.salary_in_usd > salaries.salary_in_usd.quantile(.02)]
+        
+    return salaries
+    
 
 def extend_country_code(salaries_data, countries_data):
     '''
@@ -137,9 +149,11 @@ def complete_preprocessing():
     return: fully preprocessed salaries dataframe
     '''
     world_data, salaries_data, countries_data = load_data()
-    salaries = extend_country_code(salaries_data, countries_data)
+    salaries = drop_outliers(salaries_data)
+    salaries = extend_country_code(salaries, countries_data)
     salaries = add_gdp_per_capita_to_salaries(salaries, world_data)
     salaries = make_numeric(salaries)
     salaries = add_samecountry_attribute(salaries)
-    salaries = add_ml_or_ai_attribute(salaries)    
+    salaries = add_ml_or_ai_attribute(salaries)
+    salaries = salaries.dropna()    
     return salaries
