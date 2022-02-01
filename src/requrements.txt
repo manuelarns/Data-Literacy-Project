@@ -1,6 +1,0 @@
-# pip install -r requirements.txt
-pandas==1.22.1
-geopandas==0.10.2
-matplotlib==3.5.1
-tueplots==0.0.3
-seaborn==0.11.2
