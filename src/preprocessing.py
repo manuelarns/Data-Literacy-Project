@@ -18,7 +18,7 @@ def load_data():
 
 def drop_outliers(salaries_data):
     '''
-    Drop outliers that have higher salary than the 99 quantile or lower than 1 quantile
+    Drop outliers that have higher salary than the 98% quantile or lower than 2% quantile
     '''
     salaries = salaries_data[
         salaries_data.salary_in_usd < salaries_data.salary_in_usd.quantile(.98)]
