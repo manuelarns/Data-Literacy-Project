@@ -20,14 +20,10 @@ def drop_outliers(salaries_data):
     '''
     Drop outliers that have higher salary than the 98% quantile or lower than 2% quantile
     '''
-    salaries = salaries_data[
-        salaries_data.salary_in_usd < salaries_data.salary_in_usd.quantile(.98)]
-    
-    salaries = salaries[
-        salaries.salary_in_usd > salaries.salary_in_usd.quantile(.02)]
-        
+    salaries = salaries_data[(salaries_data.salary_in_usd.quantile(.02) < salaries_data.salary_in_usd) & (salaries_data.salary_in_usd < salaries_data.salary_in_usd.quantile(.98))]
+
     return salaries
-    
+
 
 def extend_country_code(salaries_data, countries_data):
     '''
@@ -96,16 +92,16 @@ def make_numeric(salaries):
     salaries: salaries dataframe
     return: salaries dataframe with numeric attributes
     '''
-    j = 1
-    for i in ["EN", "MI", "SE", "EX"]:
-        salaries.loc[(salaries.experience_level == i), "experience_level"]=j
-        j += 1
 
-    j = 1
-    for i in ["S", "M", "L"]:
-        salaries.loc[(salaries.company_size == i), "company_size"]=j
-        j += 1
+    # ENtry level = 0, MId level = 1, SEnior level = 2, EXpert level = 3
+    for i, level in enumerate(["EN", "MI", "SE", "EX"]):
+        salaries.loc[(salaries.experience_level == level), "experience_level"]=i
 
+    # Small = 0, Medium = 1, Large = 2
+    for i, size in enumerate(["S", "M", "L"]):
+        salaries.loc[(salaries.company_size == size), "company_size"]=i
+
+    # Year estimates are assumed to be correct -> e indicator is removed
     for i in ["2021e", "2022e"]:
         salaries.loc[(salaries.work_year == i), "work_year"]= int(i[:-1])
 
@@ -123,8 +119,9 @@ def add_samecountry_attribute(salaries):
     if 'company_location_iso_a3' not in salaries.columns and 'employee_residence_iso_a3' not in salaries.columns:
         raise ValueError('Locations are not in ISO_A3 format. Use extend_country_code() first!')
 
-    ones_data = np.ones((salaries.shape[0],1))
-    salaries["same_country"] = pd.DataFrame(ones_data)
+    # add column of ones
+    salaries["same_country"] = pd.DataFrame(np.ones((salaries.shape[0],1)))
+    # switch to zero if not same country
     salaries.loc[salaries["company_location_iso_a3"] != salaries["employee_residence_iso_a3"], "same_country"] = 0
     return salaries
 
