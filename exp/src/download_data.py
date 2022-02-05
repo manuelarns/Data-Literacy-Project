@@ -1,3 +1,5 @@
+# this file downloads all datasets and stores them in the data directory.
+
 import pandas as pd
 from preprocessing import complete_preprocessing
 
