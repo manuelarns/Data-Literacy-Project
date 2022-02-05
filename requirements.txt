@@ -5,4 +5,5 @@ matplotlib
 tueplots
 seaborn
 sklearn
+pandas_profiling
 ipywidgets
