@@ -5,3 +5,4 @@ matplotlib
 tueplots
 seaborn
 sklearn
+ipywidgets
