@@ -67,8 +67,8 @@ def add_gdp_per_capita_to_salaries(salaries, world_data):
         raise ValueError('Locations are not in ISO_A3 format. Use extend_country_code() first!')
 
     world = world_data[world_data.name!="Antarctica"]
-    gdp_data = world[['iso_a3', 'gdp_md_est', 'pop_est']]
-    gdp_data['gdp_per_capita'] = (gdp_data['gdp_md_est'] / gdp_data['pop_est'] * 1000000)
+    gdp_data = world.loc[:,['iso_a3', 'gdp_md_est', 'pop_est']]
+    gdp_data.loc[:,'gdp_per_capita'] = (gdp_data['gdp_md_est'] / gdp_data['pop_est'] * 1000000)
     gdp_per_capita = gdp_data.drop({'gdp_md_est', 'pop_est'}, axis=1)
 
     #Merge gdp_per_capita with salaries
@@ -155,3 +155,4 @@ def complete_preprocessing():
     salaries = add_ml_or_ai_attribute(salaries)
     salaries = salaries.dropna()    
     return salaries
+
